@@ -1,0 +1,10 @@
+.venv/
+data/
+.git/
+__pycache__/
+*.py[codz]
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+notebooks/
+.env
