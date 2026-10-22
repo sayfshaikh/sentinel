@@ -7,11 +7,14 @@ import sys
 import time
 from collections.abc import Sequence
 from dataclasses import dataclass
+from datetime import date
 from pathlib import Path
 from types import TracebackType
+from typing import Self
 
 import httpx
 from bs4 import BeautifulSoup
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 from tenacity import (
     retry,
     retry_if_exception_type,
@@ -59,6 +62,37 @@ DEFAULT_PER_FORM: dict[str, int] = {"10-K": 1, "10-Q": 2, "8-K": 4}
 
 MIN_INTERVAL_S = 0.12  # ~8 req/s
 
+class RecentFilings(BaseModel):
+    """
+    SEC returns filings as parallel arrays - one list per column.
+    """
+    model_config = ConfigDict(extra="ignore")
+
+    accession_number: list[str] = Field(alias="accessionNumber")
+    form: list[str]
+    filing_date: list[date] = Field(alias="filingDate")
+    primary_document: list[str] = Field(alias="primaryDocument")
+
+    @model_validator(mode="after")
+    def _columns_line_up(self) -> Self:
+        n = len(self.form)
+        if not all(
+            len(col) == n
+            for col in (
+                self.accession_number,
+                self.filing_date,
+                self.primary_document,
+            )
+        ):
+            raise ValueError("SEC 'recent' columns have different lengths")
+        return self
+
+
+class _Filings(BaseModel):
+    recent: RecentFilings
+
+class Submissions(BaseModel):
+    filings: _Filings
 
 @dataclass
 class Filing:
@@ -66,13 +100,15 @@ class Filing:
     ticker: str
     form: str
     accession: str
-    filing_date: str
+    filing_date: date
     primary_document: str
 
     @property
     def url(self) -> str:
         return ARCHIVE_URL.format(
-            cik=self.cik, accession=self.accession.replace("-", ""), document=self.primary_document
+            cik=self.cik,
+            accession=self.accession.replace("-", ""),
+            document=self.primary_document
         )
 
 
@@ -86,7 +122,7 @@ def _html_to_text(raw: bytes) -> str:
 
 
 class EdgarClient:
-    "Use as Context Manager: SEC client"
+    "Throttled, retying SEC Client. Use as a Context Manager."
 
     def __init__(
         self, user_agent: str, raw_dir: Path, min_interval_s: float = MIN_INTERVAL_S
@@ -145,15 +181,15 @@ class EdgarClient:
         return resolved
 
     def recent_filings(self, ticker: str, cik: int, per_form: dict[str, int]) -> list[Filing]:
-        data = self._get(SUBMISSIONS_URL.format(cik=cik)).json()
-        recent = data["filings"]["recent"]
+        response = self._get(SUBMISSIONS_URL.format(cik=cik))
+        recent = Submissions.model_validate_json(response.content).filings.recent
         wanted = dict.fromkeys(per_form, 0)
         out: list[Filing] = []
 
-        for i, form in enumerate(recent["form"]):
+        for i, form in enumerate(recent.form):
             if form not in wanted or wanted[form] >= per_form[form]:
                 continue
-            document = recent["primaryDocument"][i]
+            document = recent.primary_document[i]
             if not document:
                 continue
             wanted[form] += 1
@@ -162,8 +198,8 @@ class EdgarClient:
                     cik=cik,
                     ticker=ticker,
                     form=form,
-                    accession=recent["accessionNumber"][i],
-                    filing_date=recent["filingDate"][i],
+                    accession=recent.accession_number[i],
+                    filing_date=recent.filing_date[i],
                     primary_document=document,
                 )
             )
@@ -194,8 +230,9 @@ class EdgarClient:
                 {
                     "cik": filing.cik,
                     "ticker": filing.ticker,
+                    "form": filing.form,
                     "accession": filing.accession,
-                    "filing_date": filing.filing_date,
+                    "filing_date": filing.filing_date.isoformat(),
                     "source_url": filing.url,
                     "chars": len(text),
                 },
