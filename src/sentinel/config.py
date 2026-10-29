@@ -20,6 +20,7 @@ class Settings(BaseSettings):
     )
     data_dir: Path = Path("data")
     qdrant_url: str = "http://localhost:6333"
+    qdrant_collection: str = "filings"
     postgres_dsn: str = "postgresql://sentinel:sentinel@localhost:5432/sentinel"
 
     # Chunking

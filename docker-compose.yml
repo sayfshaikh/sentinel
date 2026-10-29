@@ -2,7 +2,7 @@ name: sentinel
 
 services:
   qdrant:
-    image: qdrant/qdrant:latest
+    image: qdrant/qdrant:v1.20.0
     container_name: sentinel-qdrant
     restart: unless-stopped
     ports:
