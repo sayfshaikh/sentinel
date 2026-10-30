@@ -12,7 +12,6 @@ LOG = logging.getLogger("sentinel.ingest.corpus")
 
 
 class FilingMeta(BaseModel):
-
     model_config = ConfigDict(extra="ignore", frozen=True)
 
     cik: int
@@ -23,10 +22,7 @@ class FilingMeta(BaseModel):
     source_url: str
 
     def as_payload(self) -> dict[str, str]:
-        return {
-            key: str(value)
-            for key, value in self.model_dump().items()
-        }
+        return {key: str(value) for key, value in self.model_dump().items()}
 
 
 @dataclass(frozen=True, slots=True)

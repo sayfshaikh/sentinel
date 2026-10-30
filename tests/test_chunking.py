@@ -2,11 +2,14 @@ from __future__ import annotations
 
 import hashlib
 from collections.abc import Sequence
+from typing import TYPE_CHECKING
 
 import numpy as np
 import pytest
 
-from sentinel.chunking.base import Chunker
+if TYPE_CHECKING:
+    from sentinel.chunking.base import Chunker
+
 from sentinel.chunking.fixed import FixedChunker
 from sentinel.chunking.recursive import RecursiveChunker
 from sentinel.chunking.semantic import SemanticChunker
@@ -42,8 +45,8 @@ class FakeEmbedder:
 
 CHUNKERS: list[Chunker] = [
     FixedChunker(SIZE, OVERLAP),
-    RecursiveChunker(SIZE, OVERLAP), 
-    SemanticChunker(FakeEmbedder(), min_chars=100, max_chars=SIZE)
+    RecursiveChunker(SIZE, OVERLAP),
+    SemanticChunker(FakeEmbedder(), min_chars=100, max_chars=SIZE),
 ]
 
 
@@ -51,14 +54,17 @@ CHUNKERS: list[Chunker] = [
 def doc(request: pytest.FixtureRequest) -> Document:
     return Document(doc_id="0000320193/0000320193-25-000001", text=request.param)
 
+
 @pytest.mark.parametrize("chunker", CHUNKERS, ids=lambda c: c.name)
 def test_spans_are_exact(chunker: Chunker, doc: Document) -> None:
     for chunk in chunker.chunk(doc):
         assert chunk.text == doc.text[chunk.start_char : chunk.end_char]
 
+
 @pytest.mark.parametrize("chunker", CHUNKERS, ids=lambda c: c.name)
 def test_no_chunk_exceeds_size(chunker: Chunker, doc: Document) -> None:
-    assert max(len(c.text) for c in chunker.chunk(doc)) <= SIZE 
+    assert max(len(c.text) for c in chunker.chunk(doc)) <= SIZE
+
 
 @pytest.mark.parametrize("chunker", CHUNKERS, ids=lambda c: c.name)
 def test_every_word_is_covered(chunker: Chunker, doc: Document) -> None:
@@ -68,6 +74,7 @@ def test_every_word_is_covered(chunker: Chunker, doc: Document) -> None:
     missed = [i for i, ch in enumerate(doc.text) if not covered[i] and ch.isalnum()]
     assert not missed, f"uncovered text at {missed[:5]}"
 
+
 # Used recursive chunking
 def test_chunk_ids_are_stable(doc: Document) -> None:
     chunker = RecursiveChunker(SIZE, OVERLAP)
@@ -75,6 +82,7 @@ def test_chunk_ids_are_stable(doc: Document) -> None:
     first = chunker.chunk(doc)
     second = chunker.chunk(doc)
     assert [c.chunk_id for c in first] == [c.chunk_id for c in second]
+
 
 def test_strategies_produce_different_chunkings(doc: Document) -> None:
     counts = {c.name: len(c.chunk(doc)) for c in CHUNKERS}

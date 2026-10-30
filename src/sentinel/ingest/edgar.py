@@ -62,10 +62,12 @@ DEFAULT_PER_FORM: dict[str, int] = {"10-K": 1, "10-Q": 2, "8-K": 4}
 
 MIN_INTERVAL_S = 0.12  # ~8 req/s
 
+
 class RecentFilings(BaseModel):
     """
     SEC returns filings as parallel arrays - one list per column.
     """
+
     model_config = ConfigDict(extra="ignore")
 
     accession_number: list[str] = Field(alias="accessionNumber")
@@ -91,8 +93,10 @@ class RecentFilings(BaseModel):
 class _Filings(BaseModel):
     recent: RecentFilings
 
+
 class Submissions(BaseModel):
     filings: _Filings
+
 
 @dataclass
 class Filing:
@@ -106,9 +110,7 @@ class Filing:
     @property
     def url(self) -> str:
         return ARCHIVE_URL.format(
-            cik=self.cik,
-            accession=self.accession.replace("-", ""),
-            document=self.primary_document
+            cik=self.cik, accession=self.accession.replace("-", ""), document=self.primary_document
         )
 
 

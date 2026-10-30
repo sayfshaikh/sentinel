@@ -34,7 +34,6 @@ class SentenceTransformerEmbedder:
             raise ValueError(f"{model_name} does not report an embedding dimension")
         self.dim = int(dim)
 
-
     def embed(self, texts: Sequence[str]) -> list[list[float]]:
         if not texts:
             return []
@@ -43,7 +42,7 @@ class SentenceTransformerEmbedder:
             batch_size=self._batch_size,
             normalize_embeddings=True,
             convert_to_numpy=True,
-            show_progress_bar=False
+            show_progress_bar=False,
         )
         return [v.tolist() for v in vectors]
 

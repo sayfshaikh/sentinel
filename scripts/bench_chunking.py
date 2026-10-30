@@ -4,51 +4,89 @@ import argparse
 import statistics
 import time
 from collections.abc import Sequence
+from typing import TYPE_CHECKING
 
-from sentinel.chunking.base import Chunk, Chunker  # type: ignore[import-untyped]
-from sentinel.chunking.fixed import FixedChunker  # type: ignore[import-untyped]
-from sentinel.chunking.recursive import RecursiveChunker  # type: ignore[import-untyped]
-from sentinel.chunking.semantic import SemanticChunker  # type: ignore[import-untyped] 
-from sentinel.config import get_settings  # type: ignore[import-untyped]
-from sentinel.embedding.local import SentenceTransformerEmbedder  # type: ignore[import-untyped]
-from sentinel.ingest.corpus import Document, iter_documents  # type: ignore[import-untyped]
+from tabulate import tabulate
+
+if TYPE_CHECKING:
+    from sentinel.chunking.base import Chunk, Chunker
+
+from sentinel.chunking.fixed import FixedChunker
+from sentinel.chunking.recursive import RecursiveChunker
+from sentinel.chunking.semantic import SemanticChunker
+from sentinel.config import get_settings
+from sentinel.embedding.local import SentenceTransformerEmbedder
+from sentinel.ingest.corpus import Document, iter_documents
 
 MODELS = ("BAAI/bge-small-en-v1.5", "BAAI/bge-base-en-v1.5")
 
+
 def chunk_table(chunkers: Sequence[Chunker], docs: Sequence[Document]) -> list[Chunk]:
     print("\n## Chunking\n")
-    print(f"Corpus: {len(docs)} documents, "
-          f"{sum(len(d.text) for d in docs):,} characters\n")
-    print("| Strategy | Chunks | Mean chars | Median | Min | Max | Wall time |")
-    print("|---|---:|---:|---:|---:|---:|---:|")
+    print(f"Corpus: {len(docs)} documents, {sum(len(d.text) for d in docs):,} characters\n")
 
+    headers = [
+        "Strategy",
+        "Chunks",
+        "Mean chars",
+        "Median",
+        "Min",
+        "Max",
+        "Wall time",
+    ]
+
+    rows = []
     widest: list[Chunk] = []
+
     for chunker in chunkers:
         started = time.perf_counter()
         chunks = [c for doc in docs for c in chunker.chunk(doc)]
         elapsed = time.perf_counter() - started
+
         lengths = [len(c.text) for c in chunks] or [0]
-        print(
-            f"| `{chunker.name}` | {len(chunks):,} | {statistics.mean(lengths):.0f} "
-            f"| {statistics.median(lengths):.0f} | {min(lengths)} | {max(lengths)} "
-            f"| {elapsed:.1f}s |"
+
+        rows.append(
+            [
+                f"`{chunker.name}`",
+                f"{len(chunks):,}",
+                f"{statistics.mean(lengths):.0f}",
+                f"{statistics.median(lengths):.0f}",
+                min(lengths),
+                max(lengths),
+                f"{elapsed:.1f}s",
+            ]
         )
+
         if len(chunks) > len(widest):
             widest = chunks
+
+    print(tabulate(rows, headers=headers, tablefmt="github"))
 
     return widest
 
 
 def embed_table(texts: Sequence[str], batch_size: int) -> None:
     print(f"\n## Embedding - {len(texts):,} chunks, batch {batch_size}\n")
-    print("| Model | Device | Dim | Warm-up | Encode | Chunks/sec |")
-    print("|---|---|---:|---:|---:|---:|")
+
+    headers = [
+        "Model",
+        "Device",
+        "Dim",
+        "Warm-up",
+        "Encode",
+        "Chunks/sec",
+    ]
+
+    rows = []
 
     for model_name in MODELS:
-        embedder = SentenceTransformerEmbedder(model_name, batch_size=batch_size)
+        embedder = SentenceTransformerEmbedder(
+            model_name,
+            batch_size=batch_size,
+        )
 
         warm_started = time.perf_counter()
-        vectors = embedder.embed(list(texts[:8]))
+        embedder.embed(list(texts[:8]))
         warm = time.perf_counter() - warm_started
 
         started = time.perf_counter()
@@ -58,10 +96,19 @@ def embed_table(texts: Sequence[str], batch_size: int) -> None:
         assert len(vectors) == len(texts)
         assert len(vectors[0]) == embedder.dim
 
-        print(
-            f"| `{model_name}` | {embedder.device} | {embedder.dim} | {warm:.1f}s "
-            f"| {elapsed:.1f}s | {len(texts) / elapsed:.0f} |"
+        rows.append(
+            [
+                f"`{model_name}`",
+                embedder.device,
+                embedder.dim,
+                f"{warm:.1f}s",
+                f"{elapsed:.1f}s",
+                f"{len(texts) / elapsed:.0f}",
+            ]
         )
+
+    print(tabulate(rows, headers=headers, tablefmt="github"))
+
 
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="python scripts/bench_chunking.py")
@@ -78,13 +125,14 @@ def main(argv: Sequence[str] | None = None) -> int:
     embedder = SentenceTransformerEmbedder(MODELS[0], batch_size=settings.embedding_batch_size)
     chunkers: list[Chunker] = [
         FixedChunker(settings.chunk_size, settings.chunk_overlap),
-        RecursiveChunker(settings.chunk_size, settings.chunk_overlap), 
+        RecursiveChunker(settings.chunk_size, settings.chunk_overlap),
         SemanticChunker(embedder, percentile=settings.semantic_percentile),
     ]
 
     chunks = chunk_table(chunkers, docs)
     embed_table([c.text for c in chunks[: int(args.embed)]], settings.embedding_batch_size)
     return 0
+
 
 if __name__ == "__main__":
     raise SystemExit(main())

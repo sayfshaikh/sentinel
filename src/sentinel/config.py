@@ -12,6 +12,7 @@ if TYPE_CHECKING:
     from sentinel.chunking.base import Chunker
     from sentinel.embedding.base import Embedder
 
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_prefix="SENTINEL_", extra="ignore")
 
@@ -52,17 +53,19 @@ class Settings(BaseSettings):
 def get_settings() -> Settings:
     return Settings()  # type: ignore[call-arg]
 
+
 def embedder_from_config(settings: Settings | None = None) -> Embedder:
     from sentinel.embedding.local import SentenceTransformerEmbedder
 
     s = settings or get_settings()
     return SentenceTransformerEmbedder(
-        model_name=s.embedding_model,
-        batch_size=s.embedding_batch_size
+        model_name=s.embedding_model, batch_size=s.embedding_batch_size
     )
 
 
-def chunker_from_config(settings: Settings | None = None, embedder: Embedder | None = None) -> Chunker:
+def chunker_from_config(
+    settings: Settings | None = None, embedder: Embedder | None = None
+) -> Chunker:
     from sentinel.chunking.fixed import FixedChunker
     from sentinel.chunking.recursive import RecursiveChunker
     from sentinel.chunking.semantic import SemanticChunker
@@ -84,4 +87,3 @@ def chunker_from_config(settings: Settings | None = None, embedder: Embedder | N
         raise ValueError(
             f"unknown chunker {s.chunker!r}; expected one of {sorted(builders)}"
         ) from None
-    

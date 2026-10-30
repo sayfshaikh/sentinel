@@ -27,10 +27,7 @@ def test_text_before_first_heading_is_preamble() -> None:
 
 
 def test_8k_items() -> None:
-    text = (
-        "FORM 8-K\nItem 2.02 Results of Operations\nRevenue rose.\n"
-        "Item 9.01 Exhibits\nEx 99.1\n"
-    )
+    text = "FORM 8-K\nItem 2.02 Results of Operations\nRevenue rose.\nItem 9.01 Exhibits\nEx 99.1\n"
     s = Sections(text)
     assert s.at(text.index("Revenue")) == "Item 2.02"
     assert s.at(text.index("Ex 99.1")) == "Item 9.01"

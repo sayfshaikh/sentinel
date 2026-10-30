@@ -1,9 +1,12 @@
 from __future__ import annotations
 
 from collections.abc import Sequence
+from typing import TYPE_CHECKING
 
 from sentinel.chunking.base import Chunk
-from sentinel.ingest.corpus import Document
+
+if TYPE_CHECKING:
+    from sentinel.ingest.corpus import Document
 
 # Coarsest first. Fall through only when a piece is still too large.
 DEFAULT_SEPARATORS: tuple[str, ...] = ("\n\n", "\n", ". ", " ", "")
@@ -12,12 +15,8 @@ Span = tuple[int, int]
 
 
 class RecursiveChunker:
-
     def __init__(
-        self,
-        size: int = 1000,
-        overlap: int = 200,
-        separators: Sequence[str] = DEFAULT_SEPARATORS
+        self, size: int = 1000, overlap: int = 200, separators: Sequence[str] = DEFAULT_SEPARATORS
     ) -> None:
         if overlap >= size:
             raise ValueError(f"overlap {overlap} must be smaller than size {size}")
@@ -77,7 +76,8 @@ class RecursiveChunker:
         ]
 
     def _merge(self, atoms: list[Span]) -> list[Span]:
-        if not atoms: return []
+        if not atoms:
+            return []
 
         out: list[Span] = []
         cur_start, cur_end = atoms[0]

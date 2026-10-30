@@ -4,11 +4,12 @@ import time
 from collections.abc import Sequence
 from dataclasses import dataclass
 from datetime import date
-from typing import Any, cast
+from typing import TYPE_CHECKING, Any, cast
 
 from qdrant_client import QdrantClient, models
 
-from sentinel.chunking.base import Chunk
+if TYPE_CHECKING:
+    from sentinel.chunking.base import Chunk
 
 _KEYWORD_FIELDS = ("ticker", "form", "section")
 _UPSERT_BATCH = 256  # keeps each request far below Qdrant's 32 MB request limit
@@ -38,12 +39,7 @@ class QdrantStore:
         return cls(QdrantClient(url=url, timeout=120), collection)
 
     def create(
-        self,
-        dim: int, 
-        *,
-        recreate: bool = False, 
-        on_disk: bool = False,
-        quantize: bool = False
+        self, dim: int, *, recreate: bool = False, on_disk: bool = False, quantize: bool = False
     ) -> None:
         if self.client.collection_exists(self.collection):
             if not recreate:
@@ -52,7 +48,7 @@ class QdrantStore:
             self.client.delete_collection(self.collection)
 
         self.client.create_collection(
-            collection_name=self.collection, 
+            collection_name=self.collection,
             vectors_config=models.VectorParams(
                 size=dim, distance=models.Distance.COSINE, on_disk=on_disk
             ),
@@ -73,10 +69,7 @@ class QdrantStore:
         self._index("filing_date", models.PayloadSchemaType.DATETIME)
         self._index("chunk_index", models.PayloadSchemaType.INTEGER)
 
-
-    def build_index(
-        self, m: int = 16, ef_construct: int = 100, timeout_s: float = 1800
-    ) -> float:
+    def build_index(self, m: int = 16, ef_construct: int = 100, timeout_s: float = 1800) -> float:
         """
         Switch HNSW on and block until it is built. Returns seconds taken.
         """
@@ -107,13 +100,13 @@ class QdrantStore:
                     id=chunk.chunk_id,
                     vector=list(vector),
                     payload={
-                        **chunk.meta, 
-                        "doc_id": chunk.doc_id, 
+                        **chunk.meta,
+                        "doc_id": chunk.doc_id,
                         "strategy": chunk.strategy,
-                        "chunk_index": chunk.index, 
-                        "start_char": chunk.start_char, 
+                        "chunk_index": chunk.index,
+                        "start_char": chunk.start_char,
                         "end_char": chunk.end_char,
-                        "text": chunk.text
+                        "text": chunk.text,
                     },
                 )
                 for chunk, vector in zip(chunks, vectors, strict=True)
@@ -126,7 +119,7 @@ class QdrantStore:
                 collection_name=self.collection,
                 points=[
                     models.PointStruct(id=p.id, vector=p.vector, payload=p.payload)
-                    for p in points[i: i + _UPSERT_BATCH]
+                    for p in points[i : i + _UPSERT_BATCH]
                 ],
                 wait=True,
             )
@@ -145,8 +138,8 @@ class QdrantStore:
         limit: int = 20,
         *,
         where: models.Filter | None = None,
-        hnsw_ef: int | None = None, 
-        exact: bool = False, 
+        hnsw_ef: int | None = None,
+        exact: bool = False,
         rescore: bool | None = None,
     ) -> list[Hit]:
         """Nearest neighbours, `rescore` only matters on a quantised collection."""
@@ -162,7 +155,7 @@ class QdrantStore:
             query=list(vector),
             query_filter=where,
             limit=limit,
-            with_payload=True, 
+            with_payload=True,
             search_params=models.SearchParams(
                 hnsw_ef=hnsw_ef, exact=exact, quantization=quantization
             ),
@@ -178,19 +171,20 @@ class QdrantStore:
                 limit=1000,
                 offset=offset,
                 with_payload=True,
-                with_vectors=True
+                with_vectors=True,
             )
 
             out += [
-                Point(str(r.id), cast(list[float], r.vector), r.payload or {}) for r in records
+                Point(str(r.id), cast("list[float]", r.vector), r.payload or {}) for r in records
             ]
-            if offset is None: return out
+            if offset is None:
+                return out
 
     @staticmethod
     def filter(
-        *, 
+        *,
         form: str | None = None,
-        ticker: str | None = None, 
+        ticker: str | None = None,
         section: str | None = None,
         date_from: date | None = None,
         date_to: date | None = None,
@@ -222,4 +216,3 @@ class QdrantStore:
                 f"collection {self.collection!r} has dimension {size} but the embedder "
                 f"produces {dim}; re-run with --recreate after changing the embedding model"
             )
-    

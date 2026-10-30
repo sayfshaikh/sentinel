@@ -19,6 +19,7 @@ dependencies = [
     "qdrant-client>=1.20",
     "rich>=15.0.0",
     "sentence-transformers>=6.1.0",
+    "tabulate>=0.10.0",
     "tenacity>=9.1.4",
     "torch>=2.14.1",
 ]
@@ -40,6 +41,7 @@ dev = [
     "pre-commit>=4.6.2",
     "pytest>=9.1.1",
     "ruff>=0.16.8",
+    "types-tabulate>=0.10.0.20261006",
 ]
 
 [tool.ruff]

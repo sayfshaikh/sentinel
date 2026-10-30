@@ -1,15 +1,17 @@
 from __future__ import annotations
 
 import re
+from typing import TYPE_CHECKING
 
 import numpy as np
 
 from sentinel.chunking.base import Chunk
-from sentinel.ingest.corpus import Document
-from sentinel.embedding.base import Embedder
 
+if TYPE_CHECKING:
+    from sentinel.embedding.base import Embedder
+    from sentinel.ingest.corpus import Document
 
-# Sentence splitting regex: matches a sequence of non-sentence-ending characters 
+# Sentence splitting regex: matches a sequence of non-sentence-ending characters
 # followed by optional sentence-ending punctuation.
 _SENTENCE_RE = re.compile(r"[^\n.!?]+[.!?]*")
 
@@ -19,7 +21,7 @@ class SemanticChunker:
         self,
         embedder: Embedder,
         percentile: float = 0.5,
-        min_chars: int = 200, 
+        min_chars: int = 200,
         max_chars: int = 2000,
     ) -> None:
         self.embedder = embedder

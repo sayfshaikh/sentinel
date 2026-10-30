@@ -1,10 +1,14 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from sentinel.chunking.base import Chunk
-from sentinel.ingest.corpus import Document
+
+if TYPE_CHECKING:
+    from sentinel.ingest.corpus import Document
+
 
 class FixedChunker:
-
     def __init__(self, size: int = 1000, overlap: int = 200) -> None:
         if overlap >= size:
             raise ValueError(f"overlap {overlap} must be smaller than size {size}")

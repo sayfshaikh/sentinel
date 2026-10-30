@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-import bisect 
+import bisect
 import re
 
-# Item <number> at the start of a line. [^\S\n] is any whitespace except a 
+# Item <number> at the start of a line. [^\S\n] is any whitespace except a
 # newline, which includes the non-breaking spaces SEC HTML is full of.
 _HEADING = re.compile(
     r"^[^\S\n]*item[^\S\n]+(\d{1,2}[a-c]?(?:\.\d{2})?)\.?(?=\s)",
@@ -12,7 +12,6 @@ _HEADING = re.compile(
 
 
 class Sections:
-
     def __init__(self, text: str) -> None:
         last: dict[str, int] = {}
         for match in _HEADING.finditer(text):

@@ -11,6 +11,7 @@ DIM = 4
 # In-memory mode ignores payload indexes (it scans instead); the real server uses them.
 pytestmark = pytest.mark.filterwarnings("ignore:Payload indexes have no effect:UserWarning")
 
+
 def _chunk(i: int, form: str, filed: str, ticker: str = "AAPL") -> Chunk:
     return Chunk(
         doc_id=f"d/{i}",

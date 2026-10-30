@@ -3,9 +3,10 @@ from __future__ import annotations
 import uuid
 from collections.abc import Mapping
 from dataclasses import dataclass, field
-from typing import Protocol
+from typing import TYPE_CHECKING, Protocol
 
-from sentinel.ingest.corpus import Document
+if TYPE_CHECKING:
+    from sentinel.ingest.corpus import Document
 
 # Fixed namespace: chunk IDs must be reproducible across runs and machines.
 CHUNK_NAMESPACE = uuid.UUID("e1687cf4-5272-46c3-81cd-803a6ae601a6")
@@ -33,6 +34,4 @@ class Chunk:
 class Chunker(Protocol):
     name: str
 
-    def chunk(self, doc: Document) -> list[Chunk]:
-        ...
-
+    def chunk(self, doc: Document) -> list[Chunk]: ...

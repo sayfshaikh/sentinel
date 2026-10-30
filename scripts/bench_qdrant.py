@@ -9,12 +9,15 @@ from collections.abc import Sequence
 from datetime import date
 from typing import Any
 
+from tabulate import tabulate
+
 from sentinel.config import embedder_from_config, get_settings
 from sentinel.stores.qdrant_store import Point, QdrantStore
 
 K = 10
 HNSW_CONFIGS = ((16, 100), (32, 200))
 EF_VALUES = (32, 64, 128)
+
 
 def run(
     store: QdrantStore, queries: Sequence[Sequence[float]], **params: Any
@@ -34,16 +37,17 @@ def recall(got: list[list[str]], truth: list[list[str]]) -> float:
         len(set(g) & set(t)) / len(t) for g, t in zip(got, truth, strict=True) if t
     )
 
+
 def pct(latencies: list[float], q: int) -> float:
     return statistics.quantiles(latencies, n=100)[q - 1]
 
-def copy_into(
-    url: str, name: str, points: Sequence[Point], dim: int, **opts: bool
-) -> QdrantStore:
+
+def copy_into(url: str, name: str, points: Sequence[Point], dim: int, **opts: bool) -> QdrantStore:
     store = QdrantStore.connect(url, name)
     store.create(dim, recreate=True, **opts)
     store.upsert_points(points)
     return store
+
 
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="python scripts/bench_qdrant.py")
@@ -73,12 +77,25 @@ def main(argv: Sequence[str] | None = None) -> int:
     truth, exact_ms = run(main_store, queries, exact=True)
 
     print(f"\n## HNSW — {n:,} vectors x {dim} dims, {len(queries)} queries, recall@{K}\n")
-    print("| Index | Build | hnsw_ef | p50 ms | p95 ms | recall@10 |")
-    print("|---|---:|---:|---:|---:|---:|")
-    print(
-        f"| exact (brute force) | — | — | {pct(exact_ms, 50):.1f} "
-        f"| {pct(exact_ms, 95):.1f} | 1.000 |"
-    )
+    hnsw_headers = [
+        "Index",
+        "Build",
+        "hnsw_ef",
+        "p50 ms",
+        "p95 ms",
+        f"recall@{K}",
+    ]
+
+    hnsw_rows: list[list[str]] = [
+        [
+            "exact (brute force)",
+            "—",
+            "—",
+            f"{pct(exact_ms, 50):.1f}",
+            f"{pct(exact_ms, 95):.1f}",
+            "1.000",
+        ]
+    ]
     baseline: tuple[list[list[str]], list[float]] | None = None
     for m, ef_construct in HNSW_CONFIGS:
         bench = copy_into(url, f"{name}_bench", points, dim)
@@ -87,39 +104,66 @@ def main(argv: Sequence[str] | None = None) -> int:
             got, ms = run(bench, queries, hnsw_ef=ef)
             if (m, ef) == (16, 64):
                 baseline = (got, ms)
-            print(
-                f"| m={m}, ef_construct={ef_construct} | {build_s:.1f}s | {ef} "
-                f"| {pct(ms, 50):.1f} | {pct(ms, 95):.1f} | {recall(got, truth):.3f} |"
+
+            hnsw_rows.append(
+                [
+                    f"m={m}, ef_construct={ef_construct}",
+                    f"{build_s:.1f}s",
+                    f"{ef}",
+                    f"{pct(ms, 50):.1f}",
+                    f"{pct(ms, 95):.1f}",
+                    f"{recall(got, truth):.3f}",
+                ]
             )
         bench.drop()
+    print(
+        tabulate(
+            hnsw_rows,
+            headers=hnsw_headers,
+            tablefmt="github",
+        )
+    )
 
     print("\n## Scalar int8 quantisation — m=16, ef_construct=100, hnsw_ef=64\n")
-    print("| Vectors | Vector memory | p50 ms | p95 ms | recall@10 |")
-    print("|---|---:|---:|---:|---:|")
+    headers = ["Vectors", "Vector memory", "p50 ms", "p95 ms", f"recall@{K}"]
+    rows = []
     if baseline:
         got, ms = baseline
-        print(
-            f"| float32, in RAM | {n * dim * 4 / 1e6:.1f} MB | {pct(ms, 50):.1f} "
-            f"| {pct(ms, 95):.1f} | {recall(got, truth):.3f} |"
+        rows.append(
+            [
+                "float32, in RAM",
+                f"{n * dim * 4 / 1e6:.1f} MB",
+                f"{pct(ms, 50):.1f}",
+                f"{pct(ms, 95):.1f}",
+                f"{recall(got, truth):.3f}",
+            ]
         )
+
     quant = copy_into(url, f"{name}_quant", points, dim, on_disk=True, quantize=True)
     quant.build_index()
     for rescore in (False, True):
         got, ms = run(quant, queries, hnsw_ef=64, rescore=rescore)
         label = "int8 + rescore from disk (2x oversampling)" if rescore else "int8, no rescore"
-        print(
-            f"| {label} | {n * dim / 1e6:.1f} MB | {pct(ms, 50):.1f} "
-            f"| {pct(ms, 95):.1f} | {recall(got, truth):.3f} |"
+
+        rows.append(
+            [
+                label,
+                f"{n * dim / 1e6:.1f} MB",
+                f"{pct(ms, 50):.1f}",
+                f"{pct(ms, 95):.1f}",
+                f"{recall(got, truth):.3f}",
+            ]
         )
+
     quant.drop()
+
+    print(tabulate(rows, headers=headers, tablefmt="github"))
+
     print("\nVector memory is calculated: float32 = n x dim x 4 bytes, int8 = n x dim x 1.")
     print("It excludes the HNSW graph. Latency is client-side over HTTP, round trip included.")
-
     # --- filtered search -----------------------------------------------------
     years = Counter(
-        str(p.payload.get("filing_date", ""))[:4]
-        for p in points
-        if p.payload.get("form") == "8-K"
+        str(p.payload.get("filing_date", ""))[:4] for p in points if p.payload.get("form") == "8-K"
     )
     eligible = {y: c for y, c in years.items() if c >= K}
     if args.year is None and not eligible:
@@ -128,9 +172,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     rarest = min(eligible, key=lambda y: eligible[y]) if eligible else ""
     year = int(args.year) if args.year is not None else int(rarest)
 
-    where = main_store.filter(
-        form="8-K", date_from=date(year, 1, 1), date_to=date(year + 1, 1, 1)
-    )
+    where = main_store.filter(form="8-K", date_from=date(year, 1, 1), date_to=date(year + 1, 1, 1))
     matching = main_store.count(where)
     hits = main_store.search(queries[0], K, where=where)
     exact_hits = main_store.search(queries[0], K, where=where, exact=True)
@@ -142,16 +184,36 @@ def main(argv: Sequence[str] | None = None) -> int:
     overlap = len({h.id for h in hits} & {h.id for h in exact_hits})
 
     print(f"\n## Filtered search — 8-K filings from {year}\n")
-    print(f"- {matching:,} of {n:,} points match ({matching / n:.1%} of the collection)")
-    print(f"- returned {len(hits)} of {min(K, matching)} possible; all match: {all_match}")
-    print(f"- overlap with exact filtered search: {overlap}/{len(exact_hits)}")
+    filter_headers = ["Metric", "Result"]
+    filter_rows: list[list[Any]] = [
+        [
+            "Matching points",
+            f"{matching:,} of {n:,} ({matching / n:.1%})",
+        ],
+        [
+            "Returned results",
+            f"{len(hits)} of {min(K, matching)} possible",
+        ],
+        [
+            "All results match filter",
+            all_match,
+        ],
+        [
+            "Overlap with exact filtered search",
+            f"{overlap}/{len(exact_hits)}",
+        ],
+    ]
+    filter_rows.append(
+        [
+            "Expected results with post-filtering",
+            f"~{K * matching / n:.1f}",
+        ]
+    )
+
     if not all_match or len(hits) != min(K, matching):
         print("FAIL: filtered search returned non-matching or too few results")
         return 1
-    print(
-        f"- a post-filter (top {K}, then drop non-matches) would expect about "
-        f"{K * matching / n:.1f} results; getting {len(hits)} shows the filter runs during search"
-    )
+    print(tabulate(filter_rows, headers=filter_headers, tablefmt="github"))
     return 0
 
 
