@@ -1,0 +1,715 @@
+{
+  "version": 1,
+  "questions": [
+    {
+      "id": "s01",
+      "type": "single",
+      "question": "How big was AMD's worldwide workforce at the end of its 2025 fiscal year?",
+      "answers": [
+        {
+          "doc_id": "0000002488/0000002488-26-000018",
+          "quote": "we had approximately 31,000 employees in our global workforce"
+        }
+      ]
+    },
+    {
+      "id": "s02",
+      "type": "single",
+      "question": "How many full-time people did Caterpillar employ at the end of 2025, and how many of them were outside the US?",
+      "answers": [
+        {
+          "doc_id": "0000018230/0000018230-26-000008",
+          "quote": "we employed about 118,000 full-time persons of whom approximately 66,400 were located outside the United States"
+        }
+      ]
+    },
+    {
+      "id": "s03",
+      "type": "single",
+      "question": "What was PepsiCo's total headcount worldwide at the end of fiscal 2025?",
+      "answers": [
+        {
+          "doc_id": "0000077476/0000077476-26-000007",
+          "quote": "We employed approximately 306,000 people worldwide"
+        }
+      ]
+    },
+    {
+      "id": "s04",
+      "type": "single",
+      "question": "Roughly how many people worked for Pfizer around the world at the end of 2025?",
+      "answers": [
+        {
+          "doc_id": "0000078003/0000078003-26-000026",
+          "quote": "we employed approximately 75,000 people worldwide"
+        }
+      ]
+    },
+    {
+      "id": "s05",
+      "type": "single",
+      "question": "How many full- and part-time staff did Amazon have at year-end 2025?",
+      "answers": [
+        {
+          "doc_id": "0001018724/0001018724-26-000004",
+          "quote": "we employed approximately 1,576,000 full-time and part-time employees"
+        }
+      ]
+    },
+    {
+      "id": "s06",
+      "type": "single",
+      "question": "How many staff did NVIDIA have at the end of fiscal 2026, and across how many countries?",
+      "answers": [
+        {
+          "doc_id": "0001045810/0001045810-26-000021",
+          "quote": "we had approximately 42,000 employees in 38 countries"
+        }
+      ]
+    },
+    {
+      "id": "s07",
+      "type": "single",
+      "question": "What proportion of Broadcom's employees work in research and development?",
+      "answers": [
+        {
+          "doc_id": "0001730168/0001730168-25-000121",
+          "quote": "we had approximately 33,000 employees worldwide, with approximately 57% in research and development roles"
+        }
+      ]
+    },
+    {
+      "id": "s08",
+      "type": "single",
+      "question": "What was the size of Meta's global workforce at the end of 2025?",
+      "answers": [
+        {
+          "doc_id": "0001326801/0001628280-26-003942",
+          "quote": "We had a global workforce of 78,865 employees"
+        }
+      ]
+    },
+    {
+      "id": "s09",
+      "type": "single",
+      "question": "What was JPMorgan Chase's global employee count at the end of 2025?",
+      "answers": [
+        {
+          "doc_id": "0000019617/0001628280-26-008131",
+          "quote": "JPMorganChase had 318,512 employees globally"
+        }
+      ]
+    },
+    {
+      "id": "s10",
+      "type": "single",
+      "question": "How many of UnitedHealth Group's employees are clinicians?",
+      "answers": [
+        {
+          "doc_id": "0000731766/0000731766-26-000062",
+          "quote": "we had more than 390,000 employees, of whom nearly 165,000 were clinical professionals"
+        }
+      ]
+    },
+    {
+      "id": "s11",
+      "type": "single",
+      "question": "How many full-time staff did Microsoft have as of mid-2026, and how many were US-based?",
+      "answers": [
+        {
+          "doc_id": "0000789019/0001193125-26-323660",
+          "quote": "we employed approximately 223,000 people on a full-time basis, 121,000 in the U.S."
+        }
+      ]
+    },
+    {
+      "id": "s12",
+      "type": "single",
+      "question": "Approximately how many employees does Johnson & Johnson report?",
+      "answers": [
+        {
+          "doc_id": "0000200406/0000200406-26-000016",
+          "quote": "Our approximately 138,200 employees are critical drivers"
+        }
+      ]
+    },
+    {
+      "id": "s13",
+      "type": "single",
+      "question": "What were Goldman Sachs's CET1 ratios under the standardized and advanced approaches at the end of 2025?",
+      "answers": [
+        {
+          "doc_id": "0000886982/0000886982-26-000091",
+          "quote": "our CET1 capital ratio was 14.3% under the Standardized Capital Rules and 15.1% under the Advanced Capital Rules"
+        }
+      ]
+    },
+    {
+      "id": "s14",
+      "type": "single",
+      "question": "What were Morgan Stanley's standardized CET1 ratio and supplementary leverage ratio at year-end 2025?",
+      "answers": [
+        {
+          "doc_id": "0000895421/0000895421-26-000086",
+          "quote": "Standardized Common Equity Tier 1 capital ratio was 15.0%, and its Supplementary Leverage Ratio was 5.4%"
+        }
+      ]
+    },
+    {
+      "id": "s15",
+      "type": "single",
+      "question": "How much extra stock buyback capacity did NVIDIA's board approve in August 2025?",
+      "answers": [
+        {
+          "doc_id": "0001045810/0001045810-26-000021",
+          "quote": "our Board of Directors approved an additional $60.0 billion in share repurchase authorization, without expiration"
+        }
+      ]
+    },
+    {
+      "id": "s16",
+      "type": "single",
+      "question": "How large is the share buyback authorization Caterpillar's board approved in 2022?",
+      "answers": [
+        {
+          "doc_id": "0000018230/0000018230-26-000008",
+          "quote": "the Board approved a share repurchase authorization (the 2022 Authorization) of up to $15.0 billion of Caterpillar common stock"
+        }
+      ]
+    },
+    {
+      "id": "s17",
+      "type": "single",
+      "question": "What were Bank of America's total assets and employee headcount at the end of 2025?",
+      "answers": [
+        {
+          "doc_id": "0000070858/0000070858-26-000157",
+          "quote": "the Corporation had $3.4 trillion in assets and a headcount of approximately 213,000 employees"
+        }
+      ]
+    },
+    {
+      "id": "s18",
+      "type": "single",
+      "question": "In fiscal 2025, what share of the wafers made for Broadcom by contract manufacturers came from TSMC?",
+      "answers": [
+        {
+          "doc_id": "0001730168/0001730168-25-000121",
+          "quote": "approximately 95% of the wafers manufactured by our CMs were produced by TSMC"
+        }
+      ]
+    },
+    {
+      "id": "s19",
+      "type": "single",
+      "question": "Which Tesla factories are exposed to earthquake or flood risk?",
+      "answers": [
+        {
+          "doc_id": "0001318605/0001628280-26-003952",
+          "quote": "our Fremont Factory and Gigafactory Nevada are located in seismically active regions in Northern California and Nevada, and our Gigafactory Shanghai is located in a flood-prone area"
+        }
+      ]
+    },
+    {
+      "id": "s20",
+      "type": "single",
+      "question": "What was Citigroup's standardized CET1 ratio at the end of 2025, and how did it compare with a year earlier?",
+      "answers": [
+        {
+          "doc_id": "0000831001/0000831001-26-000011",
+          "quote": "Common Equity Tier 1 (CET1) Capital ratio was 13.2% as of December 31, 2025, compared to 13.6% as of December 31, 2024"
+        }
+      ]
+    },
+    {
+      "id": "y01",
+      "type": "synthesis",
+      "question": "Who makes AMD's most advanced wafers, and who assembles and tests its chips?",
+      "answers": [
+        {
+          "doc_id": "0000002488/0000002488-26-000018",
+          "quote": "We rely on Taiwan Semiconductor Manufacturing Company Limited (TSMC) for the production of all wafers for microprocessor and GPU products at 7 nanometer (nm) or smaller nodes"
+        },
+        {
+          "doc_id": "0000002488/0000002488-26-000018",
+          "quote": "We also rely on third-party manufacturers to assemble, test, mark and pack (ATMP) our products."
+        }
+      ]
+    },
+    {
+      "id": "y02",
+      "type": "synthesis",
+      "question": "Where is NVIDIA's supply chain concentrated, and who supplies its memory?",
+      "answers": [
+        {
+          "doc_id": "0001045810/0001045810-26-000021",
+          "quote": "While currently our supply chain is mainly concentrated in Asia, we are expanding into the U.S. and Latin America."
+        },
+        {
+          "doc_id": "0001045810/0001045810-26-000021",
+          "quote": "We purchase memory from SK Hynix Inc., Micron Technology, Inc., and Samsung."
+        }
+      ]
+    },
+    {
+      "id": "y03",
+      "type": "synthesis",
+      "question": "How did US export rules on NVIDIA's H20 chips for China change during 2025?",
+      "answers": [
+        {
+          "doc_id": "0001045810/0001045810-26-000021",
+          "quote": "In April 2025, the USG informed us that it requires a license for export to China"
+        },
+        {
+          "doc_id": "0001045810/0001045810-26-000021",
+          "quote": "In August 2025, the USG granted licenses that would allow us to ship certain H20 products to certain China-based customers."
+        }
+      ]
+    },
+    {
+      "id": "y04",
+      "type": "synthesis",
+      "question": "What business risks does Broadcom link to its acquisition of VMware?",
+      "answers": [
+        {
+          "doc_id": "0001730168/0001730168-25-000121",
+          "quote": "Our dependence on channel partners has increased following the acquisition of VMware."
+        },
+        {
+          "doc_id": "0001730168/0001730168-25-000121",
+          "quote": "Any acquisitions we may undertake, including the acquisition of VMware, and their integration involve risks and uncertainties"
+        }
+      ]
+    },
+    {
+      "id": "y05",
+      "type": "synthesis",
+      "question": "What would Intel do if its own manufacturing falls behind, and which companies does it see as its peers at 2nm?",
+      "answers": [
+        {
+          "doc_id": "0000050863/0000050863-26-000011",
+          "quote": "we would expect, over time, to shift manufacturing to third-party foundries, particularly TSMC"
+        },
+        {
+          "doc_id": "0000050863/0000050863-26-000011",
+          "quote": "We believe we are one of three companies (the others being TSMC and Samsung) investing in 2nm lithography"
+        }
+      ]
+    },
+    {
+      "id": "y06",
+      "type": "synthesis",
+      "question": "How did Citi's headcount change in 2025, and how many employees were part of its exit from Russia?",
+      "answers": [
+        {
+          "doc_id": "0000831001/0000831001-26-000011",
+          "quote": "Citi had approximately 226,000 full-time employees, compared to approximately 229,000 at December 31, 2024"
+        },
+        {
+          "doc_id": "0000831001/0000831001-26-000011",
+          "quote": "full exit from its operations in Russia and included all remaining businesses, as well as approximately 800 employees"
+        }
+      ]
+    },
+    {
+      "id": "y07",
+      "type": "synthesis",
+      "question": "How did Coca-Cola's headcount change from 2024 to 2025, and how many of its North American employees are unionized?",
+      "answers": [
+        {
+          "doc_id": "0000021344/0001628280-26-010047",
+          "quote": "our Company had approximately 65,900 and 69,700 employees, respectively, of which approximately 8,900 were located in the United States"
+        },
+        {
+          "doc_id": "0000021344/0001628280-26-010047",
+          "quote": "approximately 400 employees in North America were covered by collective bargaining agreements"
+        }
+      ]
+    },
+    {
+      "id": "y08",
+      "type": "synthesis",
+      "question": "How large is Walmart's workforce, and what share of its US associates are hourly?",
+      "answers": [
+        {
+          "doc_id": "0000104169/0000104169-26-000055",
+          "quote": "approximately 2.1 million associates around the world with approximately 1.6 million associates in the U.S."
+        },
+        {
+          "doc_id": "0000104169/0000104169-26-000055",
+          "quote": "approximately 92% of our associates are hourly and approximately 68% of our associates are full-time"
+        }
+      ]
+    },
+    {
+      "id": "y09",
+      "type": "synthesis",
+      "question": "How much did Reality Labs cost Meta in 2025, and what does Meta say its capital spending goes toward?",
+      "answers": [
+        {
+          "doc_id": "0001326801/0001628280-26-003942",
+          "quote": "our investments in Reality Labs reduced our 2025 overall operating profit by approximately $19.19 billion"
+        },
+        {
+          "doc_id": "0001326801/0001628280-26-003942",
+          "quote": "costs related to our data centers and technical infrastructure as well as other costs relating to our AI initiatives"
+        }
+      ]
+    },
+    {
+      "id": "y10",
+      "type": "synthesis",
+      "question": "What is Azure, and why does Microsoft expect to keep investing in capital expenditures?",
+      "answers": [
+        {
+          "doc_id": "0000789019/0001193125-26-323660",
+          "quote": "Azure is a comprehensive set of cloud services that offer developers, IT professionals, and enterprises freedom to build, deploy, and manage applications on any platform or device."
+        },
+        {
+          "doc_id": "0000789019/0001193125-26-323660",
+          "quote": "We will continue to invest in capital expenditures to support growth in our cloud offerings and our investments in AI training and other infrastructure."
+        }
+      ]
+    },
+    {
+      "id": "y11",
+      "type": "synthesis",
+      "question": "How does Alphabet break down its reporting segments, and what is driving its capital spending?",
+      "answers": [
+        {
+          "doc_id": "0001652044/0001652044-26-000018",
+          "quote": "We report Google in two segments, Google Services and Google Cloud, and all non-Google businesses collectively as Other Bets."
+        },
+        {
+          "doc_id": "0001652044/0001652044-26-000018",
+          "quote": "We continue to invest in capital expenditures as we scale our technical infrastructure, in particular for AI"
+        }
+      ]
+    },
+    {
+      "id": "y12",
+      "type": "synthesis",
+      "question": "What are Amazon's reporting segments, and what kinds of services does AWS provide?",
+      "answers": [
+        {
+          "doc_id": "0001018724/0001018724-26-000004",
+          "quote": "We have organized our operations into three segments: North America, International, and Amazon Web Services"
+        },
+        {
+          "doc_id": "0001018724/0001018724-26-000004",
+          "quote": "through AWS, which offers a broad set of on-demand technology services, including compute, storage, database, analytics, artificial intelligence and machine learning, and other services"
+        }
+      ]
+    },
+    {
+      "id": "y13",
+      "type": "synthesis",
+      "question": "How did buying Hess affect Chevron's reserves and its 2025 production?",
+      "answers": [
+        {
+          "doc_id": "0000093410/0000093410-26-000078",
+          "quote": "The largest additions were from the acquisition of Hess Corporation (Hess)"
+        },
+        {
+          "doc_id": "0000093410/0000093410-26-000078",
+          "quote": "Worldwide oil-equivalent production of 3.7 million barrels per day in 2025 was up approximately 12 percent from 2024, mainly due to the acquisition of Hess"
+        }
+      ]
+    },
+    {
+      "id": "y14",
+      "type": "synthesis",
+      "question": "How has Johnson & Johnson tried to settle its cosmetic talc claims, and what happened to its talc reserve in fiscal 2025?",
+      "answers": [
+        {
+          "doc_id": "0000200406/0000200406-26-000016",
+          "quote": "for the comprehensive and final resolution of all current and future claims related to cosmetic talc in the United States"
+        },
+        {
+          "doc_id": "0000200406/0000200406-26-000016",
+          "quote": "the reversal of approximately $7.0 billion, a significant portion of the previously accrued talc reserve"
+        }
+      ]
+    },
+    {
+      "id": "y15",
+      "type": "synthesis",
+      "question": "Why are medical costs central to UnitedHealth's profitability, and what happens if it misjudges them?",
+      "answers": [
+        {
+          "doc_id": "0000731766/0000731766-26-000062",
+          "quote": "The profitability of our products depends in large part on our ability to predict and effectively price for and manage medical costs."
+        },
+        {
+          "doc_id": "0000731766/0000731766-26-000062",
+          "quote": "If we fail to estimate, price for and manage our medical costs or design benefits in an effective manner, the profitability of our risk-based products and services could decline"
+        }
+      ]
+    },
+    {
+      "id": "y16",
+      "type": "synthesis",
+      "question": "How do Coca-Cola's drinks reach consumers, and how does its concentrate business earn revenue?",
+      "answers": [
+        {
+          "doc_id": "0000021344/0001628280-26-010047",
+          "quote": "through our network of independent bottling partners, distributors, wholesalers and retailers"
+        },
+        {
+          "doc_id": "0000021344/0001628280-26-010047",
+          "quote": "Our concentrate operations typically generate net operating revenues by selling beverage concentrates"
+        }
+      ]
+    },
+    {
+      "id": "y17",
+      "type": "synthesis",
+      "question": "What were Goldman Sachs's CET1 ratios, and what kind of capital must satisfy its capital buffer requirements?",
+      "answers": [
+        {
+          "doc_id": "0000886982/0000886982-26-000091",
+          "quote": "our CET1 capital ratio was 14.3% under the Standardized Capital Rules and 15.1% under the Advanced Capital Rules"
+        },
+        {
+          "doc_id": "0000886982/0000886982-26-000091",
+          "quote": "minimum risk-based capital requirements and additional capital conservation buffer requirements that must be satisfied solely with Common Equity Tier 1 (CET1) capital"
+        }
+      ]
+    },
+    {
+      "id": "y18",
+      "type": "synthesis",
+      "question": "Which Intel products were first built on Intel 18A, and what does Intel say leading-edge process nodes require?",
+      "answers": [
+        {
+          "doc_id": "0000050863/0000050863-26-000011",
+          "quote": "we released our initial Intel Core Ultra Series 3 processors, the first products to be manufactured using our new Intel 18A process technology"
+        },
+        {
+          "doc_id": "0000050863/0000050863-26-000011",
+          "quote": "particularly those utilizing EUV lithography such as Intel 4, Intel 3, Intel 18A, Intel 14A and future nodes, require substantial capital investment"
+        }
+      ]
+    },
+    {
+      "id": "y19",
+      "type": "synthesis",
+      "question": "How many people does JPMorgan Chase employ, and does that figure include contractors?",
+      "answers": [
+        {
+          "doc_id": "0000019617/0001628280-26-008131",
+          "quote": "JPMorganChase had 318,512 employees globally"
+        },
+        {
+          "doc_id": "0000019617/0001628280-26-008131",
+          "quote": "relates to JPMorganChase’s full-time and part-time employees and does not include the Firm’s contractors"
+        }
+      ]
+    },
+    {
+      "id": "y20",
+      "type": "synthesis",
+      "question": "What were Bank of America's assets and headcount, and which kind of lending does it flag as exposed to weak demand?",
+      "answers": [
+        {
+          "doc_id": "0000070858/0000070858-26-000157",
+          "quote": "the Corporation had $3.4 trillion in assets and a headcount of approximately 213,000 employees"
+        },
+        {
+          "doc_id": "0000070858/0000070858-26-000157",
+          "quote": "(e.g., commercial real estate, particularly office) as a result of shifts in demand and tight financial and credit conditions"
+        }
+      ]
+    },
+    {
+      "id": "m01",
+      "type": "multi_entity",
+      "question": "Which of AMD, NVIDIA and Broadcom use TSMC to make their wafers?",
+      "answers": [
+        {
+          "doc_id": "0000002488/0000002488-26-000018",
+          "quote": "We utilize Taiwan Semiconductor Manufacturing Company Limited (TSMC) for the production of wafers for our HPC, FPGA and adaptive SoC products"
+        },
+        {
+          "doc_id": "0001045810/0001045810-26-000021",
+          "quote": "We utilize foundries, such as Taiwan Semiconductor Manufacturing Company Limited, or TSMC, and Samsung Electronics Co., Ltd., or Samsung, to produce our semiconductor wafers."
+        },
+        {
+          "doc_id": "0001730168/0001730168-25-000121",
+          "quote": "The majority of our front-end wafer manufacturing operations is outsourced to external foundries, including Taiwan Semiconductor Manufacturing Company Limited"
+        }
+      ]
+    },
+    {
+      "id": "m02",
+      "type": "multi_entity",
+      "question": "How do JPMorgan, Bank of America and Citi each describe their commercial real estate risk?",
+      "answers": [
+        {
+          "doc_id": "0000019617/0001628280-26-008131",
+          "quote": "clients that rely on rental income from commercial real estate properties could be negatively affected by sustained adverse economic conditions"
+        },
+        {
+          "doc_id": "0000070858/0000070858-26-000157",
+          "quote": "(e.g., commercial real estate, particularly office) as a result of shifts in demand and tight financial and credit conditions"
+        },
+        {
+          "doc_id": "0000831001/0000831001-26-000011",
+          "quote": "Physical risks can also impact Citi’s credit risk exposures, for example, in its mortgage and commercial real estate lending businesses."
+        }
+      ]
+    },
+    {
+      "id": "m03",
+      "type": "multi_entity",
+      "question": "Do Coca-Cola, PepsiCo and Walmart each mention tariffs as a factor affecting their business?",
+      "answers": [
+        {
+          "doc_id": "0000021344/0001628280-26-010047",
+          "quote": "including import duties, tariffs, excise taxes, sales or value-added taxes"
+        },
+        {
+          "doc_id": "0000077476/0000077476-26-000007",
+          "quote": "international trade, sanctions, import/export restrictions and tariffs"
+        },
+        {
+          "doc_id": "0000104169/0000104169-26-000055",
+          "quote": "the impact of supply chain challenges, tariffs and recessionary pressures"
+        }
+      ]
+    },
+    {
+      "id": "m04",
+      "type": "multi_entity",
+      "question": "How do Microsoft, Alphabet and Meta each justify their capital spending on AI infrastructure?",
+      "answers": [
+        {
+          "doc_id": "0000789019/0001193125-26-323660",
+          "quote": "We will continue to invest in capital expenditures to support growth in our cloud offerings and our investments in AI training and other infrastructure."
+        },
+        {
+          "doc_id": "0001652044/0001652044-26-000018",
+          "quote": "We continue to invest in capital expenditures as we scale our technical infrastructure, in particular for AI"
+        },
+        {
+          "doc_id": "0001326801/0001628280-26-003942",
+          "quote": "costs related to our data centers and technical infrastructure as well as other costs relating to our AI initiatives"
+        }
+      ]
+    },
+    {
+      "id": "m05",
+      "type": "multi_entity",
+      "question": "Compare the year-end 2025 headcounts of JPMorgan Chase, Bank of America and Citigroup.",
+      "answers": [
+        {
+          "doc_id": "0000019617/0001628280-26-008131",
+          "quote": "JPMorganChase had 318,512 employees globally"
+        },
+        {
+          "doc_id": "0000070858/0000070858-26-000157",
+          "quote": "the Corporation had $3.4 trillion in assets and a headcount of approximately 213,000 employees"
+        },
+        {
+          "doc_id": "0000831001/0000831001-26-000011",
+          "quote": "Citi had approximately 226,000 full-time employees, compared to approximately 229,000 at December 31, 2024"
+        }
+      ]
+    },
+    {
+      "id": "m06",
+      "type": "multi_entity",
+      "question": "Compare the standardized CET1 ratios of Citigroup, Goldman Sachs and Morgan Stanley at the end of 2025.",
+      "answers": [
+        {
+          "doc_id": "0000831001/0000831001-26-000011",
+          "quote": "Common Equity Tier 1 (CET1) Capital ratio was 13.2% as of December 31, 2025, compared to 13.6% as of December 31, 2024"
+        },
+        {
+          "doc_id": "0000886982/0000886982-26-000091",
+          "quote": "our CET1 capital ratio was 14.3% under the Standardized Capital Rules and 15.1% under the Advanced Capital Rules"
+        },
+        {
+          "doc_id": "0000895421/0000895421-26-000086",
+          "quote": "Standardized Common Equity Tier 1 capital ratio was 15.0%, and its Supplementary Leverage Ratio was 5.4%"
+        }
+      ]
+    },
+    {
+      "id": "m07",
+      "type": "multi_entity",
+      "question": "What share buyback authorizations do NVIDIA, Caterpillar and PepsiCo describe?",
+      "answers": [
+        {
+          "doc_id": "0001045810/0001045810-26-000021",
+          "quote": "our Board of Directors approved an additional $60.0 billion in share repurchase authorization, without expiration"
+        },
+        {
+          "doc_id": "0000018230/0000018230-26-000008",
+          "quote": "the Board approved a share repurchase authorization (the 2022 Authorization) of up to $15.0 billion of Caterpillar common stock"
+        },
+        {
+          "doc_id": "0000077476/0000077476-26-000007",
+          "quote": "pursuant to the $10 billion repurchase program authorized by our Board"
+        }
+      ]
+    },
+    {
+      "id": "m08",
+      "type": "multi_entity",
+      "question": "Compare the workforce sizes of Microsoft, Meta and Amazon.",
+      "answers": [
+        {
+          "doc_id": "0000789019/0001193125-26-323660",
+          "quote": "we employed approximately 223,000 people on a full-time basis, 121,000 in the U.S."
+        },
+        {
+          "doc_id": "0001326801/0001628280-26-003942",
+          "quote": "We had a global workforce of 78,865 employees"
+        },
+        {
+          "doc_id": "0001018724/0001018724-26-000004",
+          "quote": "we employed approximately 1,576,000 full-time and part-time employees"
+        }
+      ]
+    },
+    {
+      "id": "m09",
+      "type": "multi_entity",
+      "question": "Do AMD and Intel each name the other as a competitor, and which other chipmakers do they name?",
+      "answers": [
+        {
+          "doc_id": "0000002488/0000002488-26-000018",
+          "quote": "In the Data Center segment, we compete primarily against Intel Corporation (Intel) and Nvidia Corporation"
+        },
+        {
+          "doc_id": "0000050863/0000050863-26-000011",
+          "quote": "CCG's primary competitor is AMD, which like us designs processors based on the x86 architecture."
+        },
+        {
+          "doc_id": "0000050863/0000050863-26-000011",
+          "quote": "Our competitors include companies offering platform products, such as AMD and Qualcomm; accelerator products such as GPUs, including those offered by NVIDIA and AMD"
+        }
+      ]
+    },
+    {
+      "id": "m10",
+      "type": "multi_entity",
+      "question": "Compare the employee counts of Johnson & Johnson, Pfizer and UnitedHealth Group.",
+      "answers": [
+        {
+          "doc_id": "0000200406/0000200406-26-000016",
+          "quote": "Our approximately 138,200 employees are critical drivers"
+        },
+        {
+          "doc_id": "0000078003/0000078003-26-000026",
+          "quote": "we employed approximately 75,000 people worldwide"
+        },
+        {
+          "doc_id": "0000731766/0000731766-26-000062",
+          "quote": "we had more than 390,000 employees, of whom nearly 165,000 were clinical professionals"
+        }
+      ]
+    }
+  ]
+}

@@ -12,14 +12,20 @@ if TYPE_CHECKING:
     from sentinel.chunking.base import Chunker
     from sentinel.embedding.base import Embedder
 
+BASE_DIR = Path(__file__).resolve().parents[2]
+
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_prefix="SENTINEL_", extra="ignore")
 
+    # Base Directories
+    ROOT_DIR: Path = BASE_DIR
+    DATA_DIR: Path = BASE_DIR / "data"
+    EVAL_DIR: Path = BASE_DIR / "src" / "sentinel" / "eval"
+
     sec_user_agent: str = Field(
         ..., description="SEC fair-access requires 'Name email@example.com'."
     )
-    data_dir: Path = Path("data")
     qdrant_url: str = "http://localhost:6333"
     qdrant_collection: str = "filings"
     postgres_dsn: str = "postgresql://sentinel:sentinel@localhost:5432/sentinel"
@@ -46,7 +52,7 @@ class Settings(BaseSettings):
 
     @property
     def raw_dir(self) -> Path:
-        return self.data_dir / "raw"
+        return self.DATA_DIR / "raw"
 
 
 @lru_cache(maxsize=1)

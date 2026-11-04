@@ -1,0 +1,582 @@
+{
+  "embedding_model": "BAAI/bge-small-en-v1.5",
+  "golden_set": "/Users/saif/Developer/work/sentinel/src/sentinel/eval/golden_set.json",
+  "first_hit_rank": {
+    "fixed": {
+      "s01": [
+        null
+      ],
+      "s02": [
+        null
+      ],
+      "s03": [
+        null
+      ],
+      "s04": [
+        null
+      ],
+      "s05": [
+        6
+      ],
+      "s06": [
+        null
+      ],
+      "s07": [
+        null
+      ],
+      "s08": [
+        0
+      ],
+      "s09": [
+        0
+      ],
+      "s10": [
+        null
+      ],
+      "s11": [
+        2
+      ],
+      "s12": [
+        null
+      ],
+      "s13": [
+        0
+      ],
+      "s14": [
+        null
+      ],
+      "s15": [
+        null
+      ],
+      "s16": [
+        0
+      ],
+      "s17": [
+        2
+      ],
+      "s18": [
+        0
+      ],
+      "s19": [
+        null
+      ],
+      "s20": [
+        2
+      ],
+      "y01": [
+        null,
+        null
+      ],
+      "y02": [
+        null,
+        null
+      ],
+      "y03": [
+        2,
+        2
+      ],
+      "y04": [
+        5,
+        null
+      ],
+      "y05": [
+        null,
+        null
+      ],
+      "y06": [
+        1,
+        2
+      ],
+      "y07": [
+        null,
+        0
+      ],
+      "y08": [
+        0,
+        0
+      ],
+      "y09": [
+        null,
+        null
+      ],
+      "y10": [
+        null,
+        null
+      ],
+      "y11": [
+        5,
+        null
+      ],
+      "y12": [
+        null,
+        0
+      ],
+      "y13": [
+        null,
+        null
+      ],
+      "y14": [
+        6,
+        null
+      ],
+      "y15": [
+        null,
+        null
+      ],
+      "y16": [
+        0,
+        0
+      ],
+      "y17": [
+        null,
+        null
+      ],
+      "y18": [
+        2,
+        null
+      ],
+      "y19": [
+        1,
+        1
+      ],
+      "y20": [
+        0,
+        null
+      ],
+      "m01": [
+        1,
+        null,
+        8
+      ],
+      "m02": [
+        null,
+        null,
+        null
+      ],
+      "m03": [
+        null,
+        null,
+        null
+      ],
+      "m04": [
+        null,
+        6,
+        null
+      ],
+      "m05": [
+        null,
+        null,
+        null
+      ],
+      "m06": [
+        5,
+        0,
+        null
+      ],
+      "m07": [
+        null,
+        0,
+        null
+      ],
+      "m08": [
+        null,
+        0,
+        null
+      ],
+      "m09": [
+        7,
+        6,
+        null
+      ],
+      "m10": [
+        null,
+        null,
+        null
+      ]
+    },
+    "recursive": {
+      "s01": [
+        0
+      ],
+      "s02": [
+        null
+      ],
+      "s03": [
+        null
+      ],
+      "s04": [
+        null
+      ],
+      "s05": [
+        null
+      ],
+      "s06": [
+        null
+      ],
+      "s07": [
+        4
+      ],
+      "s08": [
+        0
+      ],
+      "s09": [
+        0
+      ],
+      "s10": [
+        null
+      ],
+      "s11": [
+        null
+      ],
+      "s12": [
+        null
+      ],
+      "s13": [
+        4
+      ],
+      "s14": [
+        null
+      ],
+      "s15": [
+        null
+      ],
+      "s16": [
+        0
+      ],
+      "s17": [
+        1
+      ],
+      "s18": [
+        7
+      ],
+      "s19": [
+        3
+      ],
+      "s20": [
+        4
+      ],
+      "y01": [
+        null,
+        null
+      ],
+      "y02": [
+        null,
+        null
+      ],
+      "y03": [
+        3,
+        null
+      ],
+      "y04": [
+        null,
+        8
+      ],
+      "y05": [
+        null,
+        null
+      ],
+      "y06": [
+        0,
+        3
+      ],
+      "y07": [
+        5,
+        1
+      ],
+      "y08": [
+        0,
+        0
+      ],
+      "y09": [
+        9,
+        null
+      ],
+      "y10": [
+        null,
+        null
+      ],
+      "y11": [
+        2,
+        null
+      ],
+      "y12": [
+        8,
+        4
+      ],
+      "y13": [
+        null,
+        null
+      ],
+      "y14": [
+        7,
+        null
+      ],
+      "y15": [
+        null,
+        null
+      ],
+      "y16": [
+        0,
+        7
+      ],
+      "y17": [
+        null,
+        null
+      ],
+      "y18": [
+        2,
+        null
+      ],
+      "y19": [
+        1,
+        1
+      ],
+      "y20": [
+        8,
+        null
+      ],
+      "m01": [
+        3,
+        null,
+        null
+      ],
+      "m02": [
+        null,
+        null,
+        6
+      ],
+      "m03": [
+        null,
+        null,
+        null
+      ],
+      "m04": [
+        null,
+        null,
+        null
+      ],
+      "m05": [
+        null,
+        null,
+        null
+      ],
+      "m06": [
+        6,
+        7,
+        null
+      ],
+      "m07": [
+        null,
+        1,
+        null
+      ],
+      "m08": [
+        4,
+        0,
+        null
+      ],
+      "m09": [
+        4,
+        9,
+        null
+      ],
+      "m10": [
+        null,
+        null,
+        null
+      ]
+    },
+    "semantic": {
+      "s01": [
+        null
+      ],
+      "s02": [
+        0
+      ],
+      "s03": [
+        null
+      ],
+      "s04": [
+        null
+      ],
+      "s05": [
+        0
+      ],
+      "s06": [
+        null
+      ],
+      "s07": [
+        null
+      ],
+      "s08": [
+        0
+      ],
+      "s09": [
+        0
+      ],
+      "s10": [
+        null
+      ],
+      "s11": [
+        0
+      ],
+      "s12": [
+        null
+      ],
+      "s13": [
+        null
+      ],
+      "s14": [
+        null
+      ],
+      "s15": [
+        null
+      ],
+      "s16": [
+        2
+      ],
+      "s17": [
+        null
+      ],
+      "s18": [
+        8
+      ],
+      "s19": [
+        null
+      ],
+      "s20": [
+        4
+      ],
+      "y01": [
+        null,
+        null
+      ],
+      "y02": [
+        null,
+        null
+      ],
+      "y03": [
+        0,
+        3
+      ],
+      "y04": [
+        null,
+        null
+      ],
+      "y05": [
+        null,
+        null
+      ],
+      "y06": [
+        0,
+        2
+      ],
+      "y07": [
+        0,
+        0
+      ],
+      "y08": [
+        1,
+        null
+      ],
+      "y09": [
+        null,
+        null
+      ],
+      "y10": [
+        null,
+        null
+      ],
+      "y11": [
+        0,
+        null
+      ],
+      "y12": [
+        null,
+        0
+      ],
+      "y13": [
+        8,
+        null
+      ],
+      "y14": [
+        null,
+        null
+      ],
+      "y15": [
+        1,
+        1
+      ],
+      "y16": [
+        0,
+        0
+      ],
+      "y17": [
+        null,
+        null
+      ],
+      "y18": [
+        1,
+        7
+      ],
+      "y19": [
+        0,
+        null
+      ],
+      "y20": [
+        null,
+        null
+      ],
+      "m01": [
+        0,
+        1,
+        3
+      ],
+      "m02": [
+        null,
+        null,
+        null
+      ],
+      "m03": [
+        null,
+        null,
+        null
+      ],
+      "m04": [
+        null,
+        null,
+        null
+      ],
+      "m05": [
+        null,
+        null,
+        null
+      ],
+      "m06": [
+        3,
+        null,
+        null
+      ],
+      "m07": [
+        null,
+        3,
+        null
+      ],
+      "m08": [
+        null,
+        0,
+        1
+      ],
+      "m09": [
+        null,
+        2,
+        null
+      ],
+      "m10": [
+        null,
+        null,
+        null
+      ]
+    }
+  }
+}
