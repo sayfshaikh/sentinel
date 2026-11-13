@@ -6,6 +6,7 @@ import time
 from collections.abc import Sequence
 
 from sentinel.config import chunker_from_config, embedder_from_config, get_settings
+from sentinel.embedding.bm25 import BM25Encoder
 from sentinel.ingest.corpus import iter_documents
 from sentinel.ingest.sections import Sections
 from sentinel.stores.qdrant_store import QdrantStore
@@ -24,6 +25,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     settings = get_settings()
     embedder = embedder_from_config(settings)
     chunker = chunker_from_config(settings, embedder)
+    bm25 = BM25Encoder(avg_len=settings.bm25_avg_len)
     store = QdrantStore.connect(settings.qdrant_url, settings.qdrant_collection)
     store.create(embedder.dim, recreate=args.recreate)
 
@@ -38,14 +40,14 @@ def main(argv: Sequence[str] | None = None) -> int:
         started = time.perf_counter()
         vectors = embedder.embed([c.text for c in chunks])
         embed_s += time.perf_counter() - started
-        store.upsert(chunks, vectors)
+        store.upsert(chunks, vectors, [bm25.encode_document(c.text) for c in chunks])
         docs += 1
         total += len(chunks)
         ticker, form = doc.meta.get("ticker", "?"), doc.meta.get("form", "?")
         print(f"{ticker:6} {form:5} {len(chunks):6,} chunks")
 
     if not total:
-        print(f"nothing to index under {settings.raw_dir} - run the Day 1 ingest first")
+        print(f"nothing to index under {settings.raw_dir} - run the ingest first")
         return 1
 
     build_s = store.build_index()

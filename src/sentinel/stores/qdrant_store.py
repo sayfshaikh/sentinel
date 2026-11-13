@@ -10,7 +10,10 @@ from qdrant_client import QdrantClient, models
 
 if TYPE_CHECKING:
     from sentinel.chunking.base import Chunk
+    from sentinel.embedding.bm25 import SparseVec
 
+DENSE = "dense"
+SPARSE = "bm25"
 _KEYWORD_FIELDS = ("ticker", "form", "section")
 _UPSERT_BATCH = 256  # keeps each request far below Qdrant's 32 MB request limit
 
@@ -20,6 +23,7 @@ class Point:
     id: str
     vector: list[float]
     payload: dict[str, Any]
+    sparse: SparseVec | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -49,9 +53,12 @@ class QdrantStore:
 
         self.client.create_collection(
             collection_name=self.collection,
-            vectors_config=models.VectorParams(
-                size=dim, distance=models.Distance.COSINE, on_disk=on_disk
-            ),
+            vectors_config={
+                DENSE: models.VectorParams(
+                    size=dim, distance=models.Distance.COSINE, on_disk=on_disk
+                )
+            },
+            sparse_vectors_config={SPARSE: models.SparseVectorParams(modifier=models.Modifier.IDF)},
             hnsw_config=models.HnswConfigDiff(m=0),
             optimizers_config=models.OptimizersConfigDiff(indexing_threshold=1),
             quantization_config=(
@@ -93,7 +100,13 @@ class QdrantStore:
             time.sleep(0.25)
         raise TimeoutError(f"{self.collection}: HNSW not built after {timeout_s:.0f}s")
 
-    def upsert(self, chunks: Sequence[Chunk], vectors: Sequence[Sequence[float]]) -> None:
+    def upsert(
+        self,
+        chunks: Sequence[Chunk],
+        vectors: Sequence[Sequence[float]],
+        sparse: Sequence[SparseVec] | None = None,
+    ) -> None:
+        sparse_vectors = sparse if sparse is not None else [None] * len(chunks)
         self.upsert_points(
             [
                 Point(
@@ -108,8 +121,9 @@ class QdrantStore:
                         "end_char": chunk.end_char,
                         "text": chunk.text,
                     },
+                    sparse=sparse_vec,
                 )
-                for chunk, vector in zip(chunks, vectors, strict=True)
+                for chunk, vector, sparse_vec in zip(chunks, vectors, sparse_vectors, strict=True)
             ]
         )
 
@@ -118,11 +132,20 @@ class QdrantStore:
             self.client.upsert(
                 collection_name=self.collection,
                 points=[
-                    models.PointStruct(id=p.id, vector=p.vector, payload=p.payload)
+                    models.PointStruct(id=p.id, vector=self._vectors(p), payload=p.payload)
                     for p in points[i : i + _UPSERT_BATCH]
                 ],
                 wait=True,
             )
+
+    @staticmethod
+    def _vectors(point: Point) -> dict[str, Any]:
+        vectors: dict[str, Any] = {DENSE: point.vector}
+        if point.sparse and point.sparse.indices:  # a chunk of only stopwords has no terms
+            vectors[SPARSE] = models.SparseVector(
+                indices=point.sparse.indices, values=point.sparse.values
+            )
+        return vectors
 
     def drop(self) -> None:
         self.client.delete_collection(self.collection)
@@ -153,12 +176,33 @@ class QdrantStore:
         response = self.client.query_points(
             collection_name=self.collection,
             query=list(vector),
+            using=DENSE,
             query_filter=where,
             limit=limit,
             with_payload=True,
             search_params=models.SearchParams(
                 hnsw_ef=hnsw_ef, exact=exact, quantization=quantization
             ),
+        )
+        return [Hit(str(p.id), p.score, p.payload or {}) for p in response.points]
+
+    def search_sparse(
+        self,
+        query: SparseVec,
+        limit: int = 10,
+        *,
+        where: models.Filter | None = None,
+    ) -> list[Hit]:
+        """BM25 search: Qdrant multiplies each query term by its IDF."""
+        if not query.indices:  # a query of only stopwords matches nothing
+            return []
+        response = self.client.query_points(
+            collection_name=self.collection,
+            query=models.SparseVector(indices=query.indices, values=query.values),
+            using=SPARSE,
+            query_filter=where,
+            limit=limit,
+            with_payload=True,
         )
         return [Hit(str(p.id), p.score, p.payload or {}) for p in response.points]
 
@@ -171,11 +215,12 @@ class QdrantStore:
                 limit=1000,
                 offset=offset,
                 with_payload=True,
-                with_vectors=True,
+                with_vectors=[DENSE],
             )
 
             out += [
-                Point(str(r.id), cast("list[float]", r.vector), r.payload or {}) for r in records
+                Point(str(r.id), cast("dict[str, list[float]]", r.vector)[DENSE], r.payload or {})
+                for r in records
             ]
             if offset is None:
                 return out
@@ -209,10 +254,14 @@ class QdrantStore:
 
     def _check_dim(self, dim: int) -> None:
         vectors = self.client.get_collection(self.collection).config.params.vectors
-        size = vectors.size if isinstance(vectors, models.VectorParams) else None
-
-        if size != dim:
+        dense = vectors.get(DENSE) if isinstance(vectors, dict) else None
+        if dense is None:
             raise ValueError(
-                f"collection {self.collection!r} has dimension {size} but the embedder "
+                f"collection {self.collection!r} was created without a dense vector field; "
+                "re-run with --recreate"
+            )
+        if dense.size != dim:
+            raise ValueError(
+                f"collection {self.collection!r} has dimension {dense.size} but the embedder "
                 f"produces {dim}; re-run with --recreate after changing the embedding model"
             )

@@ -5,14 +5,18 @@ from __future__ import annotations
 import json
 import math
 from pathlib import Path
+from types import SimpleNamespace
+from typing import Any
 
 import pytest
 from qdrant_client import QdrantClient
 
 from sentinel.chunking.base import Chunk
+from sentinel.eval import label
 from sentinel.eval.golden import Answer, Question, find_quote, load
 from sentinel.eval.retrieval import bootstrap, evaluate
 from sentinel.eval.retrieval_metrics import covers, score
+from sentinel.retrieval.dense import DenseRetriever
 from sentinel.stores.qdrant_store import QdrantStore
 
 pytestmark = pytest.mark.filterwarnings("ignore:Payload indexes have no effect:UserWarning")
@@ -96,11 +100,41 @@ def test_evaluate_end_to_end() -> None:
         Chunk("d/1", "fixed", 0, "x" * 100, 100, 200),
         Chunk("d/2", "fixed", 0, "y" * 50, 0, 50),
     ]
-    store.upsert(chunks, [[1.0, 0.0], [0.0, 1.0]])
+    store.upsert(chunks=chunks, vectors=[[1.0, 0.0], [0.0, 1.0]])
     questions = [
         Question("q1", "single", "about d/1?", (A,)),
         Question("q2", "single", "d/2?", (B,)),
     ]
-    scores, chars = evaluate(store, questions, [[1.0, 0.1], [0.1, 1.0]])
-    assert [s.first_hit for s in scores] == [(0,), (0,)]
-    assert chars == 150
+    embedder: Any = SimpleNamespace(
+        embed_query=lambda q: [1.0, 0.1] if "1" in q else [0.1, 1.0], name="fake", dim=2
+    )
+    run = evaluate(DenseRetriever(store, embedder), questions)
+    assert [s.first_hit for s in run.scores] == [(0,), (0,)]
+    assert run.chars_top5 == 150
+    assert len(run.latency_ms) == 2
+
+
+def test_label_writes_a_loadable_golden_set(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    raw = tmp_path / "raw" / "0000320193"
+    raw.mkdir(parents=True)
+    (raw / "0000320193-25-000079.txt").write_text(
+        "As of September\xa027, 2025 the Company had approximately 166,000 employees.\n",
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(label, "get_settings", lambda: SimpleNamespace(raw_dir=tmp_path / "raw"))
+    path = str(tmp_path / "golden.json")
+
+    assert label.main(["--file", path, "question", "s01", "single", "How many employees?"]) == 0
+    before = Path(path).read_text(encoding="utf-8")
+    quote = "As of September 27, 2025 the Company had approximately 166,000 employees."
+    assert (
+        label.main(["--file", path, "answer", "s01", DOC_ID, "the Company had 999 employees"]) == 1
+    )
+    assert label.main(["--file", path, "answer", "s99", DOC_ID, quote]) == 1
+    assert Path(path).read_text(encoding="utf-8") == before
+
+    assert label.main(["--file", path, "answer", "s01", DOC_ID, quote]) == 0
+    [q] = load(Path(path), tmp_path / "raw")
+    assert (q.id, len(q.answers)) == ("s01", 1)

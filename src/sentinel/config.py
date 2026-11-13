@@ -11,8 +11,11 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 if TYPE_CHECKING:
     from sentinel.chunking.base import Chunker
     from sentinel.embedding.base import Embedder
+    from sentinel.retrieval.base import Retriever
 
 BASE_DIR = Path(__file__).resolve().parents[2]
+
+Stage = Literal["dense", "hybrid", "rerank"]
 
 
 class Settings(BaseSettings):
@@ -39,6 +42,12 @@ class Settings(BaseSettings):
     # Embedding
     embedding_model: str = "BAAI/bge-small-en-v1.5"
     embedding_batch_size: int = 64
+
+    # Hybrid retrieval and reranking
+    bm25_avg_len: float = 160.0
+    hybrid_candidates: int = 50
+    reranker_model: str = "BAAI/bge-reranker-base"
+    reranker_candidates: int = 20
 
     @field_validator("sec_user_agent")
     @classmethod
@@ -93,3 +102,30 @@ def chunker_from_config(
         raise ValueError(
             f"unknown chunker {s.chunker!r}; expected one of {sorted(builders)}"
         ) from None
+
+
+def retriever_from_config(
+    stage: Stage = "rerank",
+    settings: Settings | None = None,
+    embedder: Embedder | None = None,
+) -> Retriever:
+
+    from sentinel.embedding.bm25 import BM25Encoder
+    from sentinel.retrieval.dense import DenseRetriever
+    from sentinel.retrieval.hybrid import HybridRetriever
+    from sentinel.retrieval.rerank import CrossEncoderReranker, RerankRetriever
+    from sentinel.retrieval.sparse import SparseRetriever
+    from sentinel.stores.qdrant_store import QdrantStore
+
+    s = settings or get_settings()
+    store = QdrantStore.connect(s.qdrant_url, s.qdrant_collection)
+    dense = DenseRetriever(store, embedder or embedder_from_config(s))
+    if stage == "dense":
+        return dense
+    bm25 = SparseRetriever(store, BM25Encoder(avg_len=s.bm25_avg_len))
+    hybrid = HybridRetriever([dense, bm25], candidates=s.hybrid_candidates)
+    if stage == "hybrid":
+        return hybrid
+    return RerankRetriever(
+        hybrid, CrossEncoderReranker(s.reranker_model), candidates=s.reranker_candidates
+    )
