@@ -1,5 +1,3 @@
-"""Day 4: metrics, golden-set loading, and the evaluation loop end to end."""
-
 from __future__ import annotations
 
 import json

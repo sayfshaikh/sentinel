@@ -11,6 +11,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 if TYPE_CHECKING:
     from sentinel.chunking.base import Chunker
     from sentinel.embedding.base import Embedder
+    from sentinel.generate.base import Generator
     from sentinel.retrieval.base import Retriever
 
 BASE_DIR = Path(__file__).resolve().parents[2]
@@ -48,6 +49,16 @@ class Settings(BaseSettings):
     hybrid_candidates: int = 50
     reranker_model: str = "BAAI/bge-reranker-base"
     reranker_candidates: int = 20
+
+    # Generation
+    generator: Literal["local", "api"] = "local"
+    generator_model: str = "Qwen/Qwen2.5-1.5B-Instruct"
+    generator_context: int = 4096
+    generator_max_new_tokens: int = 512
+    generator_temperature: float = 0.0
+    generator_api_base_url: str = "https://generativelanguage.googleapis.com/v1beta/openai"
+    generator_api_model: str = "gemini-3.8-flash"
+    generator_api_key: str = ""
 
     @field_validator("sec_user_agent")
     @classmethod
@@ -128,4 +139,30 @@ def retriever_from_config(
         return hybrid
     return RerankRetriever(
         hybrid, CrossEncoderReranker(s.reranker_model), candidates=s.reranker_candidates
+    )
+
+
+def generator_from_config(settings: Settings | None = None) -> Generator:
+    s = settings or get_settings()
+    if s.generator == "api":
+        from sentinel.generate.cloud import ChatAPIGenerator
+
+        if not s.generator_api_key:
+            raise ValueError(
+                "SENTINEL_GENERATOR=api needs SENTINEL_GENERATOR_API_KEY "
+                "(free from Google AI Studio)"
+            )
+        return ChatAPIGenerator(
+            base_url=s.generator_api_base_url,
+            api_key=s.generator_api_key,
+            model=s.generator_api_model,
+            context_limit=s.generator_context,
+            temperature=s.generator_temperature,
+        )
+    from sentinel.generate.local import HFGenerator
+
+    return HFGenerator(
+        model_name=s.generator_model,
+        context_limit=s.generator_context,
+        temperature=s.generator_temperature,
     )
