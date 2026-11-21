@@ -302,4 +302,4 @@ are committed (`data/` is gitignored). EDGAR's
 User-Agent, which is why `SENTINEL_SEC_USER_AGENT` is mandatory, and the client stays under
 10 requests a second.
 
-Code: MIT, see [LICENSE](/LICENSE)
+Code: GNU, see [LICENSE](/LICENSE)
